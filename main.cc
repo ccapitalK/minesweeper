@@ -30,7 +30,7 @@ int main() {
         return EXIT_FAILURE;
 
     sf::Clock frame_timer;
-    std::cout << "Made it this far\n";
+    sf::RectangleShape panel;
 
     int i=0;
     while (window.isOpen()) {

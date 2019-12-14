@@ -28,9 +28,13 @@ class Board {
     int num_bombs_;
     bool game_ended_;
   private:
+    // methods
+    int count_neighbour_bombs(int tx, int ty) const noexcept;
+    int count_neighbour_of_type(int tx, int ty, int type) const noexcept;
+    void generate() noexcept;
     int draw_x_;
     int draw_y_;
-    void generate() noexcept;
+    // private members
     std::vector<std::vector<int>> board_;
     sf::Texture board_texture_;
 };

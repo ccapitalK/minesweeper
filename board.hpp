@@ -17,6 +17,7 @@ class Board {
     // methods
     Board(int x, int y, int num_cols=30, int num_rows=16, int num_bombs=99);
     int get_value_at_pos(int x, int y) const noexcept;
+    int get_num_remaining() const noexcept;
     void draw(sf::RenderWindow& window) const noexcept;
     void handle_mouse_click(sf::Event::MouseButtonEvent event) noexcept;
     void expand_square(int tx, int ty) noexcept;
@@ -34,6 +35,7 @@ class Board {
     void generate() noexcept;
     int draw_x_;
     int draw_y_;
+    int num_flagged_;
     // private members
     std::vector<std::vector<int>> board_;
     sf::Texture board_texture_;

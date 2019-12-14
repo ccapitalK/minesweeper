@@ -3,6 +3,7 @@
 #include<SFML/Graphics.hpp>
 
 extern sf::Font game_font;
+extern sf::Font counter_font;
 
 class ResourceLoadException {
   public:

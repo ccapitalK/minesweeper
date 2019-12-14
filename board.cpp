@@ -50,6 +50,10 @@ void Board::generate() noexcept {
     }
 }
 
+int Board::get_num_remaining() const noexcept {
+    return num_bombs_ - num_flagged_;
+}
+
 void Board::draw(sf::RenderWindow& window) const noexcept {
     //std::cout << "Rendering Board\n";
     //std::cout << board_.size() << ' ' << board_[0].size() << '\n';
@@ -162,10 +166,10 @@ void Board::expand_square_neighbours(int tx, int ty) noexcept {
 
 void Board::flag_square(int tx, int ty) noexcept {
     switch (board_[tx][ty]) {
-        case UNOPENED: board_[tx][ty] = FLAGGED; break;
-        case BOMB: board_[tx][ty] = FLAGGED_BOMB; break;
-        case FLAGGED: board_[tx][ty] = UNOPENED; break;
-        case FLAGGED_BOMB: board_[tx][ty] = BOMB; break;
+        case UNOPENED: board_[tx][ty] = FLAGGED; ++num_flagged_; break;
+        case BOMB: board_[tx][ty] = FLAGGED_BOMB; ++num_flagged_; break;
+        case FLAGGED: board_[tx][ty] = UNOPENED; --num_flagged_; break;
+        case FLAGGED_BOMB: board_[tx][ty] = BOMB; --num_flagged_; break;
     }
 }
 

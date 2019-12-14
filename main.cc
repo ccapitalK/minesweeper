@@ -4,6 +4,7 @@
 #include<unistd.h>
 #include<SFML/Graphics.hpp>
 #include"board.hpp"
+#include"panel.hpp"
 
 sf::Color background_color {127,127,127,255};
 sf::Font game_font;
@@ -20,17 +21,21 @@ void wait_for_frame(sf::Clock &clock) {
 int main() {
     // initialize randomness
     srand(time(0)*getpid());
-    Board board {15, 65};
+    Board board {15, 80};
+    Panel panel {15, 15, board.num_cols_*board.TILE_SIZE_PIXELS, 50};
 
     int width=30+(board.num_cols_*board.TILE_SIZE_PIXELS);
-    int height=80+(board.num_rows_*board.TILE_SIZE_PIXELS);
+    int height=95+(board.num_rows_*board.TILE_SIZE_PIXELS);
     sf::RenderWindow window(sf::VideoMode(width, height), "Minesweeper");
 
     if (!game_font.loadFromFile("res/C64_Pro_Mono-STYLE.ttf"))
         return EXIT_FAILURE;
 
+    if (!counter_font.loadFromFile("res/Segment14.otf"))
+        return EXIT_FAILURE;
+
     sf::Clock frame_timer;
-    sf::RectangleShape panel;
+    sf::Clock game_timer;
 
     int current_width = width;
     int current_height = height;
@@ -56,6 +61,7 @@ int main() {
                     height << '\n';
                 break;
             case sf::Event::Closed:
+                std::cout << "Got exit request\n";
                 window.close();
                 continue;
             case sf::Event::MouseButtonReleased:
@@ -64,9 +70,18 @@ int main() {
                 break;
             }
         }
-        window.clear(background_color);
-        board.draw(window);
-        window.display();
-        wait_for_frame(frame_timer);
+        // update panel
+        { 
+            int mine_count = board.get_num_remaining();
+            panel.set_mine_count(mine_count);
+            panel.set_time_elapsed(game_timer.getElapsedTime().asSeconds());
+        }
+        if (window.isOpen()) {
+            window.clear(background_color);
+            board.draw(window);
+            panel.draw(window);
+            window.display();
+            wait_for_frame(frame_timer);
+        }
     }
 }
